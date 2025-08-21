@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST-localhost}
+      POSTGRES_PORT: ${POSTGRES_PORT-5432}
+      POSTGRES_USER: ${POSTGRES_USER-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD-changem}
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME-rsshub}
+    ports:
+      - "5432:5432"
+  rsshub:
+    build: .
+    command: ./rsshub fetch
+    depends_on:
+      - postgres
+    environment:
+      CLI_APP_TIMER_INTERVAL: ${CLI_APP_TIMER_INTERVAL-3m}
+      CLI_APP_WORKERS_COUNT: ${CLI_APP_WORKERS_COUNT-3}
